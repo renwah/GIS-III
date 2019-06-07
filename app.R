@@ -23,7 +23,7 @@ ui <- fluidPage(
     sidebarPanel(
       
       sliderInput("height",
-                  "Elevation",
+                  "Minimum Elevation",
                   min = 100,
                   max = 5000,
                   step = 20,
@@ -47,9 +47,9 @@ server <- function(input, output) {
   output$map <- renderLeaflet({
     
     nz_try <- filter(nz_height, 
-                          elevation == input$height)
+                          elevation > input$height)
     
-    leaflet(data = nz_try) %>%
+    leaflet(nz_try) %>%
       addTiles() %>%
       addMarkers()
   })
@@ -57,7 +57,7 @@ server <- function(input, output) {
   output$table <- renderDataTable({
     
     nz_try <- filter(nz_height, 
-                          elevation == input$height)
+                          elevation > input$height)
     
     nz_try
     
